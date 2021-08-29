@@ -1,0 +1,78 @@
+<% include partials/_header %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-7">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Price</td>
+            <td class="w-25">Photo</td>
+          </tr>
+        </thead>
+        <tbody id="productsTable">
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-5">
+      <div class="card-body">
+
+        <form id="productForm">
+          <div class="form-group">
+            <input id="name"type="text" name="name" placeholder="Name" class="form-control" autofocus>
+          </div>
+          <div class="form-group">
+            <input id="price"type="number" name="price" placeholder="Price" class="form-control">
+          </div>
+          <div class="form-group">
+            <input id="url" type="text" name="url" placeholder="URL photo" class="form-control">
+          </div>
+
+          <button id="save" type="submit" class="btn btn-primary">
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+   const socket = io.connect();
+
+//PRODUCT
+  const name = document.getElementById('name');
+  const price = document.getElementById('price');
+  const url = document.getElementById('url');
+  const save = document.getElementById('save');
+  const productForm = document.getElementById('productForm');
+
+  productForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const product = { 
+      name: name.value, 
+      price: price.value,
+      url: url.value
+  };
+  socket.emit('nuevoProducto', product);
+  productForm.reset();
+  name.focus();
+  });
+
+  socket.on('productsTable', product => {
+  const html = listaProductos(product);
+  
+  document.getElementById('productsTable').innerHTML = html;
+  });
+  
+  const listaProductos = productsTable => productsTable.map( product =>
+  `
+      <tr>
+          <td>${product.name}</td>
+          <td>${product.price}</td>
+          <td>${product.url}</td>
+      </tr>
+  `
+  ).join(' ');
+</script>
+<% include partials/_footer %>

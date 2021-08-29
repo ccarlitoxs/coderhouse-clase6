@@ -1,0 +1,19 @@
+{
+  "name": "entregable6",
+  "version": "1.0.0",
+
+  "scripts": {
+    "dev": "nodemon tareaCoderHouse/app.js",
+    "start": "node tareaCoderHouse/app.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "node-emoji": "^1.11.0",
+    "socket.io": "^4.1.3"
+  }
+}

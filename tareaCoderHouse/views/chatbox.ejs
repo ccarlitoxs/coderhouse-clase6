@@ -1,0 +1,71 @@
+<% include partials/_header %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-7">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <td class="w-25">Name</td>
+            <td>Messaje</td>
+            <td class="w-25">Date</td>
+          </tr>
+        </thead>
+        <tbody id="mensajes">
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-5">
+      <div class="card-body">
+        <form id="messageForm">
+          <div class="form-group">
+            <input id="user" type="text" name="name" placeholder="Name" class="form-control" autofocus>
+          </div>
+          <div class="form-group">
+            <input id="msg" type="text" name="messaje" placeholder="Messaje" class="form-control">
+          </div>
+          <button id="send" type="submit" class="btn btn-primary">
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const socket = io.connect();
+  //MESSAGE
+  
+  const user = document.getElementById('user');
+    const message = document.getElementById('msg');
+    const send = document.getElementById('send');
+    const messageForm = document.getElementById('messageForm');
+
+    messageForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const msg = { 
+        author: user.value, 
+        text: message.value 
+    };
+    socket.emit('nuevoMensaje', msg);
+    messageForm.reset();
+    message.focus();
+    });
+
+    socket.on('mensajes', msg => {
+    const html = listaMensajes(msg);
+    document.getElementById('mensajes').innerHTML = html;
+    });
+
+    const listaMensajes = mensajes => mensajes.map( msg =>
+    `
+        <tr>
+            <td>${msg.author}</td>
+             <td>${msg.text}</td>
+            <td>${msg.fyh}</td> 
+        </tr>
+    `
+    ).join(' ');
+</script>
+<% include partials/_footer %>
